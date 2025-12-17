@@ -5,13 +5,13 @@
     "email": "iknite@gmail.com"
   },
   "metadata": {
-    "description": "Plugins for managing Claude Code context with git worktrees",
+    "description": "Plugin for store Claude Code context in a detached branch inside the repository project, using worktrees",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "worktree-context",
-      "source": ".",
+      "source": "./",
       "description": "Bootstrap projects with separation of concerns between AI configuration and source code",
       "version": "1.0.0",
       "author": {
