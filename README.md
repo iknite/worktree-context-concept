@@ -4,21 +4,25 @@ A Claude Code plugin that bootstraps projects with **separation of concerns** be
 
 ## Installation
 
-### Step 1: Add plugin to Claude Code
-
-Copy the `.claude/` directory to your Claude Code configuration:
+### From Marketplace (Recommended)
 
 ```bash
-# User-level (available in all projects)
-cp -r .claude/* ~/.claude/
+# Add the marketplace
+/plugin marketplace add iknite/worktree-context-concept
 
-# Or project-level (only this project)
-cp -r .claude/* /path/to/project/.claude/
+# Install the plugin
+/plugin install worktree-context@worktree-context-marketplace
 ```
 
-### Step 2: Verify installation
+### Manual Installation
 
-Start Claude Code and check the commands are available:
+```bash
+# Clone and copy to user config
+git clone https://github.com/iknite/worktree-context-concept.git
+cp -r worktree-context-concept/.claude/* ~/.claude/
+```
+
+### Verify Installation
 
 ```
 /wt-list
@@ -29,12 +33,11 @@ Start Claude Code and check the commands are available:
 
 ### Bootstrap a new project
 
-```bash
-# Start Claude Code and run:
+```
 /context-init /path/to/your/repo
 ```
 
-This will set up the complete worktree structure automatically.
+This sets up the complete worktree structure automatically.
 
 ### Daily workflow
 
@@ -96,11 +99,24 @@ bare-repo/
 | **Agent** (`.claude/agents/`) | `worktree-manager` for complex operations |
 | **Skill** (`.claude/skills/`) | Knowledge base Claude discovers automatically |
 
+## Plugin Management
+
+```bash
+# Update the plugin
+/plugin update worktree-context
+
+# Disable temporarily
+/plugin disable worktree-context@worktree-context-marketplace
+
+# Uninstall
+/plugin uninstall worktree-context@worktree-context-marketplace
+```
+
 ## Troubleshooting
 
 **Commands not showing up?**
-- Ensure `.claude/commands/` is in the right location
-- Restart Claude Code
+- Run `/plugin` to check installation status
+- Try `/plugin update worktree-context`
 
 **Need complex worktree operations?**
 Ask Claude: "Use the worktree-manager agent to help me..."
