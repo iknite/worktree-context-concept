@@ -4,22 +4,32 @@ A Claude Code plugin that bootstraps projects with **separation of concerns** be
 
 ## Installation
 
-### From Marketplace (Recommended)
+### Project-Level (Recommended)
+
+Install the plugin into your project's `context` branch so it's stored alongside your AI configuration:
 
 ```bash
 # Add the marketplace
 /plugin marketplace add iknite/worktree-context-concept
 
-# Install the plugin
-/plugin install worktree-context@worktree-context-marketplace
+# Install to project (stored in .claude/, version controlled)
+/plugin install worktree-context@worktree-context-marketplace --scope project
 ```
 
-### Manual Installation
+This installs the plugin into your `context` branch's `.claude/` directory, keeping AI tooling separate from your project code.
+
+### Local-Only (Not Shared)
 
 ```bash
-# Clone and copy to user config
-git clone https://github.com/iknite/worktree-context-concept.git
-cp -r worktree-context-concept/.claude/* ~/.claude/
+# Install locally (gitignored, not shared with team)
+/plugin install worktree-context@worktree-context-marketplace --scope local
+```
+
+### Global Installation
+
+```bash
+# Install globally (available in all projects)
+/plugin install worktree-context@worktree-context-marketplace --scope user
 ```
 
 ### Verify Installation
@@ -89,6 +99,17 @@ bare-repo/
 - Project code stays in `main`/`master` lineage
 - Feature branches are nested inside `context` but ignored by it
 - Clean project history without AI config noise
+- Each project can have different plugins/configurations in its own `context` branch
+
+## Installation Scopes
+
+| Scope | Location | Shared | Use Case |
+|-------|----------|--------|----------|
+| `project` | `.claude/` | Yes (version controlled) | Team shares same AI config |
+| `local` | `.claude/` | No (gitignored) | Personal tweaks |
+| `user` | `~/.claude/` | No | Available everywhere |
+
+**Recommendation:** Use `--scope project` to keep the plugin in your `context` branch, maintaining the separation of concerns methodology.
 
 ## Components
 
