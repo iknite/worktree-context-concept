@@ -41,7 +41,7 @@ git clone --bare <repo-url> <repo-name>
 cd <repo-name>
 ```
 
-### Step 3: Create the /root directory structure
+### Step 3: Create the /root directory structure if not exists
 ```bash
 mkdir -p root
 ```

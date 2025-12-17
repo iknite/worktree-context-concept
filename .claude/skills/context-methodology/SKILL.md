@@ -30,8 +30,8 @@ Use **two independent git histories** in the same repository:
 | Branch | Purpose | Contains |
 |--------|---------|----------|
 | `context` | AI configuration | CLAUDE.md, .claude/, settings |
-| `master` | Project code | Source code, tests, docs |
-| `feature/*` | Development | Feature work (descends from master) |
+| `main`/`master` | Project code | Source code, tests, docs |
+| `feature/*` | Development | Feature work (descends from main/master) |
 
 ### Directory Layout
 
@@ -47,7 +47,7 @@ bare-repo/
     │       │   └── my-feature/  # Feature branch worktree
     │       └── fix/
     │           └── bug-123/     # Bugfix branch worktree
-    └── master/            # Optional direct master access
+    └── main/              # main/master branch (direct access, read-only)
 ```
 
 ### Key Insight
@@ -57,6 +57,21 @@ The `context` branch's `.gitignore` contains `worktree/**/`, so:
 - AI config and code remain in separate histories
 - Claude Code runs from `context/`, sees both contexts
 
+## Detecting the Default Branch
+
+Repositories may use either `main` or `master` as their default branch. Always detect it:
+
+```bash
+# Method 1: From remote HEAD (most reliable if remote exists)
+git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'
+
+# Method 2: Check which branch exists locally
+git branch -l main master 2>/dev/null | head -1 | tr -d '* '
+
+# Method 3: Combined approach
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || git branch -l main master 2>/dev/null | head -1 | tr -d '* ')
+```
+
 ## Workflow
 
 ### Creating a New Feature
@@ -65,8 +80,11 @@ The `context` branch's `.gitignore` contains `worktree/**/`, so:
 # From the context worktree
 cd root/context
 
-# Create feature worktree from master
-git worktree add -b feature/my-feature worktree/feature/my-feature master
+# Detect default branch
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+
+# Create feature worktree from default branch
+git worktree add -b feature/my-feature worktree/feature/my-feature $DEFAULT_BRANCH
 
 # Work in the feature
 cd worktree/feature/my-feature
@@ -76,8 +94,8 @@ cd worktree/feature/my-feature
 git add . && git commit -m "feat: add feature"
 git push -u origin feature/my-feature
 
-# Create PR targeting master
-gh pr create --base master
+# Create PR targeting default branch
+gh pr create --base $DEFAULT_BRANCH
 ```
 
 ### Updating AI Configuration
@@ -92,11 +110,11 @@ git push origin context
 
 ## Rules
 
-1. **Never edit `root/master/` directly** - always use a worktree
+1. **Never edit `root/main/` or `root/master/` directly** - always use a worktree
 2. **All code worktrees inside `worktree/`** - maintains the separation
-3. **Feature branches from `master`** - not from `context`
-4. **Context branch is orphan** - no shared history with master
-5. **PRs target `master`** - context changes stay on context branch
+3. **Feature branches from default branch** - not from `context`
+4. **Context branch is orphan** - no shared history with main/master
+5. **PRs target default branch** - context changes stay on context branch
 
 ## Benefits
 
@@ -118,3 +136,6 @@ A: Each worktree can have its own `.claude/` that overrides or extends the paren
 
 **Q: How do I migrate an existing repo?**
 A: Use the `/context-init` command or the `worktree-manager` agent to set up the structure.
+
+**Q: Does it work with both main and master?**
+A: Yes! The commands auto-detect the default branch. You can also explicitly specify the base branch as an argument.

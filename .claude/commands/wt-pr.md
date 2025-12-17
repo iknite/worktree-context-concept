@@ -6,7 +6,10 @@ argument-hint: <branch-name> [base-branch]
 
 # Create PR from Worktree
 
-Create a GitHub Pull Request for branch `$1` targeting `${2:-master}`.
+Create a GitHub Pull Request for branch `$1`.
+
+## Detect default branch
+!`git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || (git branch -l main master 2>/dev/null | head -1 | tr -d '* ')`
 
 ## Current status of the branch
 !`cd worktree/$1 2>/dev/null && git status || echo "Worktree not found at worktree/$1"`
@@ -15,13 +18,33 @@ Create a GitHub Pull Request for branch `$1` targeting `${2:-master}`.
 !`cd worktree/$1 2>/dev/null && git log --oneline -5 || echo ""`
 
 ## Task
-1. Navigate to the worktree: `worktree/$1`
-2. Check for uncommitted changes - if any, ask user what to do
-3. Push the branch to remote: `git push -u origin $1`
-4. Create the PR using `gh pr create`:
-   - Title: derive from branch name or recent commits
-   - Body: summarize changes with a test plan
-   - Base: `${2:-master}`
+
+### Step 1: Determine the base branch
+- If `$2` is provided, use it as the PR base
+- Otherwise, detect the default branch (main or master) using:
+  ```bash
+  git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || git branch -l main master 2>/dev/null | head -1 | tr -d '* '
+  ```
+
+### Step 2: Navigate to the worktree
+```bash
+cd worktree/$1
+```
+
+### Step 3: Check for uncommitted changes
+If any uncommitted changes exist, ask user what to do.
+
+### Step 4: Push the branch
+```bash
+git push -u origin $1
+```
+
+### Step 5: Create the PR
+```bash
+gh pr create --base <detected-base-branch> --title "..." --body "..."
+```
+- Title: derive from branch name or recent commits
+- Body: summarize changes with a test plan
 
 ## PR Body Template
 ```
