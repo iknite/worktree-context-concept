@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'root/master'; then echo '{\"decision\": \"block\", \"reason\": \"Direct edits to root/master/ are not allowed. Create a worktree in worktree/ folder instead using /wt-new command.\"}'; exit 2; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'root/master'; then echo '{\"decision\": \"block\", \"reason\": \"Direct edits to root/master/ are not allowed. Create a worktree in worktree/ folder instead using /wt-new command.\"}'; exit 2; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'root/master'; then echo '{\"decision\": \"block\", \"reason\": \"Direct edits to root/master/ are not allowed. Create a worktree in worktree/ folder instead using /wt-new command.\"}'; exit 2; fi"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_USER_PROMPT\" | grep -qi 'commit\\|push\\|merge'; then echo 'Reminder: Use /wt-pr to create PRs from worktree branches.'; fi; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

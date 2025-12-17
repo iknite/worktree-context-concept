@@ -1,15 +1,31 @@
-# Worktree Context Concept for Agents
+# Worktree Context Plugin for Claude Code
 
-A Claude Code plugin that implements a **separation of concerns** between AI context/configuration and project source code using git worktrees.
+A Claude Code plugin that enforces **separation of concerns** between AI configuration and project source code using git worktrees.
+
+## Quick Start
+
+```bash
+# Create a new feature worktree
+/wt-new feature/my-feature
+
+# List all worktrees
+/wt-list
+
+# Create a PR from your feature
+/wt-pr feature/my-feature
+
+# Remove a completed worktree
+/wt-remove feature/my-feature --delete-branch
+```
 
 ## The Problem
 
-When working with AI coding assistants like Claude Code, you often need:
-- `CLAUDE.md` files with project-specific instructions
+When using AI coding assistants like Claude Code, projects accumulate:
+- `CLAUDE.md` files with instructions
 - `.claude/` directories with settings and configurations
 - Custom slash commands and hooks
 
-These files clutter your project history and mix AI tooling concerns with your actual source code.
+These files clutter project history and mix AI tooling concerns with source code.
 
 ## The Solution: Context Branch Methodology
 
@@ -21,12 +37,17 @@ bare-repo/
 │   ├── context/              # context branch (AI configuration)
 │   │   ├── CLAUDE.md         # Project instructions for Claude
 │   │   ├── .claude/          # Claude Code settings
+│   │   │   ├── commands/     # Slash commands
+│   │   │   ├── agents/       # Subagents
+│   │   │   └── skills/       # Agent skills
 │   │   ├── .gitignore        # Ignores worktree/**/
 │   │   └── worktree/         # All project worktrees live here
 │   │       └── feature/
 │   │           └── my-feature/  # Actual code (from master lineage)
 │   └── master/               # master branch (optional direct access)
 ```
+
+**Key insight**: The `context` branch ignores `worktree/**/`, so nested code worktrees don't pollute AI config history.
 
 ### Key Concepts
 
@@ -36,54 +57,106 @@ bare-repo/
 | `master` | Project source code | Normal project history |
 | `feature/*` | Feature branches | Descendants of master |
 
-### How It Works
-
-1. **The `context` branch** is an orphan branch with its own history - it never merges with `master`
-2. **All code worktrees** are created inside `context/worktree/` and descend from `master`
-3. **The `.gitignore`** in context ignores `worktree/**/`, so nested worktrees don't pollute context commits
-4. **Claude Code** runs from the `context` worktree, seeing both the AI configuration AND the nested code worktrees
-
 ## Installation
 
-```bash
-# Clone as bare repository
-git clone --bare <repo-url> my-project
-cd my-project
+Copy the `.claude/` directory to your context branch:
 
-# Set up the context branch structure
-# (Plugin will automate this)
+```bash
+cp -r .claude/ /path/to/your/repo/root/context/.claude/
 ```
 
-## Usage
+Or initialize a new repo with the methodology:
 
 ```bash
-# Create a new feature branch (from context worktree)
-git worktree add -b feature/my-feature worktree/feature/my-feature master
+/context-init /path/to/repo
+```
 
-# Work on your feature
-cd worktree/feature/my-feature
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/wt-new <branch> [base]` | Create a new worktree from base (default: master) |
+| `/wt-list` | List all worktrees with status |
+| `/wt-remove <branch> [-d]` | Remove worktree, optionally delete branch |
+| `/wt-pr <branch> [base]` | Create GitHub PR for a worktree branch |
+| `/context-init [path]` | Initialize methodology on a repo |
+
+## Components
+
+### Slash Commands (`.claude/commands/`)
+User-invoked commands for explicit worktree operations.
+
+### Hooks (`.claude/settings.json`)
+Automatic guardrails that:
+- Block direct edits to `root/master/`
+- Remind about PR workflow on commit-related prompts
+
+### Subagent (`.claude/agents/worktree-manager.md`)
+Specialized agent for complex operations:
+- Bulk worktree cleanup
+- Migration to methodology
+- Troubleshooting worktree issues
+
+### Skill (`.claude/skills/context-methodology/`)
+Knowledge base that Claude discovers automatically when you ask about:
+- Worktree structure
+- Branch organization
+- The separation of concerns pattern
+
+## Workflow Example
+
+```bash
+# 1. Start from context worktree
+cd root/context
+
+# 2. Create feature worktree
+/wt-new feature/user-auth
+
+# 3. Work on your feature
+cd worktree/feature/user-auth
 # ... make changes ...
 
-# Claude Code sees both:
-# - Context from parent (CLAUDE.md, .claude/)
-# - Your feature code
+# 4. Commit your work
+git add . && git commit -m "feat: add user authentication"
+
+# 5. Create PR (from context worktree)
+cd ../..  # back to context
+/wt-pr feature/user-auth
+
+# 6. After merge, cleanup
+/wt-remove feature/user-auth --delete-branch
 ```
 
-## Plugin Features (Planned)
+## Rules Enforced
 
-- [ ] Initialize context branch methodology on existing repos
-- [ ] Automatically create worktrees with proper structure
-- [ ] Validate worktree hierarchy
-- [ ] Sync context across worktrees
-- [ ] Clean up merged worktrees
+1. **No direct master edits** - Hooks block edits to `root/master/`
+2. **Worktrees in `worktree/`** - Commands create worktrees in the right place
+3. **PRs for all changes** - PR command encourages proper workflow
+4. **Feature branches from master** - Commands default to master as base
 
-## Repository Structure
+## Plugin Features
 
-This repository itself uses the context branch methodology:
+- [x] Initialize context branch methodology on existing repos
+- [x] Automatically create worktrees with proper structure
+- [x] Validate worktree hierarchy (via hooks)
+- [x] PR workflow integration
+- [x] Clean up merged worktrees
 
-- **`context` branch**: Contains this documentation context and Claude Code configuration
-- **`master` branch**: Contains the plugin source code
-- **Feature branches**: Development happens in `worktree/feature/*`
+## Troubleshooting
+
+**Worktree already exists for branch**
+```bash
+# Use existing branch without -b flag
+git worktree add worktree/feature/name feature/name
+```
+
+**Broken worktree reference**
+```bash
+git worktree prune
+```
+
+**Need complex worktree operations**
+Ask Claude to use the `worktree-manager` agent for bulk operations or migrations.
 
 ---
 with <3 @iknite
