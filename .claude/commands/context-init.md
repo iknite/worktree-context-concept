@@ -11,36 +11,82 @@ Set up the separation of concerns structure for AI context and project code.
 ## Target
 Repository at: `${1:-.}` (current directory if not specified)
 
+## Standard Structure
+
+All worktrees live inside a `/root` folder within the bare repository:
+
+```
+bare-repo/
+└── root/
+    ├── context/              # context branch (AI configuration)
+    │   ├── CLAUDE.md
+    │   ├── .claude/
+    │   ├── .gitignore        # Contains: worktree/**/
+    │   └── worktree/         # All code worktrees here
+    │       └── feature/...
+    └── master/               # master/main branch (direct access)
+```
+
 ## Task
-Initialize the context branch methodology:
 
-### Step 1: Check if already initialized
-- Look for existing `context` branch
-- Check for existing worktree structure
+### Step 1: Detect repository type
+- Check if target is a bare repo, regular repo, or needs cloning
+- Identify the main branch name (master or main)
 
-### Step 2: Create orphan context branch (if needed)
+### Step 2: Convert to bare repo structure (if needed)
+If the repo is not bare:
 ```bash
+# Clone as bare
+git clone --bare <repo-url> <repo-name>
+cd <repo-name>
+```
+
+### Step 3: Create the /root directory structure
+```bash
+mkdir -p root
+```
+
+### Step 4: Create master/main worktree
+```bash
+# Detect main branch name
+MAIN_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "master")
+git worktree add root/$MAIN_BRANCH $MAIN_BRANCH
+```
+
+### Step 5: Create orphan context branch and worktree
+```bash
+# Create orphan branch
 git checkout --orphan context
 git reset --hard
 git commit --allow-empty -m "init: context branch for AI configuration"
+
+# Add as worktree
+git worktree add root/context context
 ```
 
-### Step 3: Set up context branch structure
-Create these files:
-- `CLAUDE.md` - Basic project instructions
-- `.gitignore` - With `worktree/**/` pattern
-- `.claude/` directory for settings
+### Step 6: Set up context branch structure
+In `root/context/`, create:
+- `CLAUDE.md` - Basic project instructions template
+- `.gitignore` - With `worktree/**/` to ignore nested worktrees
+- `.claude/` directory for commands, agents, skills
+- `worktree/` directory for code worktrees
 
-### Step 4: Create worktree directory
+### Step 7: Verify setup
 ```bash
-mkdir -p worktree
+git worktree list
 ```
 
-### Step 5: Verify setup
-- List branches to confirm `context` exists
-- Show the final structure
+Expected output:
+```
+/path/to/bare-repo              (bare)
+/path/to/bare-repo/root/context [context]
+/path/to/bare-repo/root/master  [master]
+```
 
 ## Output
-Provide clear instructions on next steps:
-1. How to create worktrees for development
-2. How to switch between context and code
+
+Provide clear next steps:
+1. `cd root/context` to work with AI configuration
+2. Use `/wt-new feature/name` to create feature worktrees
+3. All code work happens in `root/context/worktree/`
+4. Never edit `root/master/` directly - use worktrees instead
