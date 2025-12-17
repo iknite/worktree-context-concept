@@ -30,16 +30,16 @@ DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@
 2. **Default branch** (`root/$DEFAULT_BRANCH`):
    ```bash
    git -C <default-branch-path> status --short
-   git -C <default-branch-path> log origin/$DEFAULT_BRANCH..HEAD --oneline 2>/dev/null
+   git -C <default-branch-path> log origin/${DEFAULT_BRANCH}..HEAD --oneline 2>/dev/null
    ```
 
 3. **All feature worktrees** (inside `worktree/`):
    ```bash
    for dir in worktree/*/*; do
-     if [ -d "$dir" ]; then
-       echo "=== $dir ==="
-       git -C "$dir" status --short
-       git -C "$dir" log origin/$(git -C "$dir" branch --show-current)..HEAD --oneline 2>/dev/null || echo "No remote tracking"
+     if [ -d "${dir}" ]; then
+       echo "=== ${dir} ==="
+       git -C "${dir}" status --short
+       git -C "${dir}" log origin/$(git -C "${dir}" branch --show-current)..HEAD --oneline 2>/dev/null || echo "No remote tracking"
      fi
    done
    ```

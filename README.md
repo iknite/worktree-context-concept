@@ -59,24 +59,74 @@ bare-repo/
 
 ## Installation
 
-Copy the `.claude/` directory to your context branch:
+### Option 1: Initialize a new repository
 
 ```bash
-cp -r .claude/ /path/to/your/repo/root/context/.claude/
+# Clone your repo as bare
+git clone --bare git@github.com:user/repo.git my-project
+cd my-project
+
+# Create root directory structure
+mkdir -p root
+
+# Create worktree for default branch (main or master)
+git worktree add root/master master  # or root/main main
+
+# Create orphan context branch
+git checkout --orphan context
+git reset --hard
+git commit --allow-empty -m "init: context branch for AI configuration"
+
+# Create context worktree
+git worktree add root/context context
+
+# Set up context structure
+cd root/context
+mkdir -p worktree .claude/{commands,agents,skills}
+echo 'worktree/**/' > .gitignore
+
+# Copy plugin files (from this repo or download)
+# cp -r <plugin-source>/.claude/* .claude/
+
+git add .
+git commit -m "init: add context branch plugin"
 ```
 
-Or initialize a new repo with the methodology:
+### Option 2: Add to existing context branch
+
+If you already have the context branch methodology set up:
 
 ```bash
-/context-init /path/to/repo
+cd root/context
+cp -r <plugin-source>/.claude/* .claude/
+git add .claude/
+git commit -m "feat: add worktree context plugin"
+```
+
+### Option 3: Use /context-init command
+
+If you have Claude Code running with this plugin already installed elsewhere:
+
+```bash
+/context-init /path/to/your/repo
+```
+
+### Verify installation
+
+After installation, these commands should be available:
+```bash
+/wt-list      # List all worktrees
+/wt-status    # Show status of all worktrees
+/wt-new       # Create new worktree
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/wt-new <branch> [base]` | Create a new worktree from base (default: master) |
-| `/wt-list` | List all worktrees with status |
+| `/wt-new <branch> [base]` | Create a new worktree from base (default: main/master) |
+| `/wt-list` | List all worktrees |
+| `/wt-status` | Show status of all worktrees (uncommitted, unpushed, behind) |
 | `/wt-remove <branch> [-d]` | Remove worktree, optionally delete branch |
 | `/wt-pr <branch> [base]` | Create GitHub PR for a worktree branch |
 | `/context-init [path]` | Initialize methodology on a repo |
