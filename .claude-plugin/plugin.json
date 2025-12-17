@@ -1,0 +1,22 @@
+{
+  "name": "worktree-context",
+  "version": "1.0.0",
+  "description": "Bootstrap projects with separation of concerns between AI configuration and source code using git worktrees",
+  "author": {
+    "name": "iknite",
+    "url": "https://github.com/iknite"
+  },
+  "repository": "https://github.com/iknite/worktree-context-concept",
+  "license": "MIT",
+  "keywords": [
+    "worktree",
+    "git",
+    "context",
+    "separation-of-concerns",
+    "bootstrap"
+  ],
+  "commands": ".claude/commands/",
+  "agents": ".claude/agents/",
+  "skills": ".claude/skills/",
+  "hooks": ".claude/settings.json"
+}
