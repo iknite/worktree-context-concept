@@ -22,3 +22,5 @@ git worktree list
 # Navigate between worktrees
 cd ../master  # switch to master worktree
 ```
+- Use master branch as the base of all worktrees, that must be inside /root/context/worktree/ folder
+- never use `/root/master/` branch directly. allways create a new worktree in `/root/context/worktree/` and create a github pr
