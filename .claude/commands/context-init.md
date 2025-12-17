@@ -48,9 +48,9 @@ mkdir -p root
 
 ### Step 4: Create master/main worktree
 ```bash
-# Detect main branch name
-MAIN_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "master")
-git worktree add root/$MAIN_BRANCH $MAIN_BRANCH
+# Detect default branch name
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || git branch -l main master 2>/dev/null | head -1 | tr -d '* ')
+git worktree add root/$DEFAULT_BRANCH $DEFAULT_BRANCH
 ```
 
 ### Step 5: Create orphan context branch and worktree
