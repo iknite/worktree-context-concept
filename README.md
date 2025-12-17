@@ -10,7 +10,7 @@ Install the plugin into your project's `context` branch so it's stored alongside
 
 ```bash
 # Add the marketplace
-/plugin marketplace add iknite/worktree-context-concept
+/plugin marketplace add iknite/worktree-context-plugin
 
 # Install to project (stored in .claude/, version controlled)
 /plugin install worktree-context@worktree-context-marketplace --scope project

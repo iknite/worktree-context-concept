@@ -6,7 +6,7 @@
     "name": "iknite",
     "url": "https://github.com/iknite"
   },
-  "repository": "https://github.com/iknite/worktree-context-concept",
+  "repository": "https://github.com/iknite/worktree-context-plugin",
   "license": "MIT",
   "keywords": [
     "worktree",
