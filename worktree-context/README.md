@@ -35,8 +35,8 @@ This installs the plugin into your `context` branch's `.claude/` directory, keep
 ### Verify Installation
 
 ```
-/wt-list
-/wt-status
+/worktree-context:wt-list
+/worktree-context:wt-status
 ```
 
 ## Usage
@@ -44,7 +44,7 @@ This installs the plugin into your `context` branch's `.claude/` directory, keep
 ### Bootstrap a new project
 
 ```
-/context-init /path/to/your/repo
+/worktree-context:context-init /path/to/your/repo
 ```
 
 This sets up the complete worktree structure automatically.
@@ -53,31 +53,31 @@ This sets up the complete worktree structure automatically.
 
 ```bash
 # Check status of all worktrees
-/wt-status
+/worktree-context:wt-status
 
 # Create a new feature branch
-/wt-new feature/my-feature
+/worktree-context:wt-new feature/my-feature
 
 # Work on your feature in worktree/feature/my-feature
 # ... make changes with Claude Code ...
 
 # Create a PR when ready
-/wt-pr feature/my-feature
+/worktree-context:wt-pr feature/my-feature
 
 # Clean up after merge
-/wt-remove feature/my-feature --delete-branch
+/worktree-context:wt-remove feature/my-feature --delete-branch
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/context-init [path]` | Bootstrap a repo with the context branch methodology |
-| `/wt-new <branch> [base]` | Create a new worktree (auto-detects main/master) |
-| `/wt-list` | List all worktrees |
-| `/wt-status` | Show status: uncommitted changes, unpushed commits, sync state |
-| `/wt-pr <branch> [base]` | Create GitHub PR from a worktree branch |
-| `/wt-remove <branch> [-d]` | Remove worktree, optionally delete branch |
+| `/worktree-context:context-init [path]` | Bootstrap a repo with the context branch methodology |
+| `/worktree-context:wt-new <branch> [base]` | Create a new worktree (auto-detects main/master) |
+| `/worktree-context:wt-list` | List all worktrees |
+| `/worktree-context:wt-status` | Show status: uncommitted changes, unpushed commits, sync state |
+| `/worktree-context:wt-pr <branch> [base]` | Create GitHub PR from a worktree branch |
+| `/worktree-context:wt-remove <branch> [-d]` | Remove worktree, optionally delete branch |
 
 ## The Methodology
 
