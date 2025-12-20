@@ -1,1 +1,7 @@
+# Personal settings (permissions, risk tolerance)
+.claude/settings.local.json
+
+# Nested worktrees for feature branches
 worktree/**/
+
+
