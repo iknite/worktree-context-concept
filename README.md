@@ -32,9 +32,9 @@ Install a specific Plugin:
 
 Provides commands for managing git worktrees with a focus on AI-assisted development:
 
-- `/context-init` - Bootstrap a repo with the context branch methodology
-- `/wt-new` - Create a new worktree for a feature branch
-- `/wt-list` - List all worktrees
-- `/wt-status` - Show status of all worktrees (uncommitted changes, sync state)
-- `/wt-pr` - Create a GitHub PR from a worktree branch
-- `/wt-remove` - Clean up a worktree after merge
+- `/worktree-context:context-init` - Bootstrap a repo with the context branch methodology
+- `/worktree-context:wt-new` - Create a new worktree for a feature branch
+- `/worktree-context:wt-list` - List all worktrees
+- `/worktree-context:wt-status` - Show status of all worktrees (uncommitted changes, sync state)
+- `/worktree-context:wt-pr` - Create a GitHub PR from a worktree branch
+- `/worktree-context:wt-remove` - Clean up a worktree after merge
