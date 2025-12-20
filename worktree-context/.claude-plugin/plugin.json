@@ -15,8 +15,8 @@
     "separation-of-concerns",
     "bootstrap"
   ],
-  "commands": ".claude/commands/",
-  "agents": ".claude/agents/",
-  "skills": ".claude/skills/",
-  "hooks": ".claude/settings.json"
+  "commands": "./commands/",
+  "agents": "./agents/worktree-manager.md",
+  "skills": "./skills/",
+  "hooks": "./settings.json"
 }

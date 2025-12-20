@@ -14,7 +14,8 @@ You are a specialized agent for managing git worktrees following the **context b
 1. **Separation of Concerns**: The `context` branch holds AI configuration (CLAUDE.md, .claude/), while the default branch (main/master) and feature branches hold project code
 2. **Worktree Location**: All code worktrees MUST be inside `worktree/` folder
 3. **Branch Lineage**: Feature branches descend from the default branch (main or master), never from `context`
-4. **No Direct Edits**: Never edit `root/main/` or `root/master/` directly; always use a worktree
+4. **No Direct Edits or Access**: Never edit a branch like `root/main/` or `root/master/` in `root/` directly; always use a worktree
+
 
 ## Detecting the Default Branch
 
