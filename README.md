@@ -17,7 +17,24 @@ Then browse and install individual plugins (commands or agents):
 /plugin
 ```
 
-Install a specific command:
+Install a specific Plugin:
 ```bash
 /plugin install worktree-context@iknite-cc-marketplace
 ```
+
+## Available Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| [worktree-context](./worktree-context/) | Bootstrap projects with **separation of concerns** between AI configuration and source code using git worktrees. Keeps `CLAUDE.md` and `.claude/` in a dedicated `context` branch while your project code stays clean in `main`/`master`. |
+
+### worktree-context
+
+Provides commands for managing git worktrees with a focus on AI-assisted development:
+
+- `/context-init` - Bootstrap a repo with the context branch methodology
+- `/wt-new` - Create a new worktree for a feature branch
+- `/wt-list` - List all worktrees
+- `/wt-status` - Show status of all worktrees (uncommitted changes, sync state)
+- `/wt-pr` - Create a GitHub PR from a worktree branch
+- `/wt-remove` - Clean up a worktree after merge

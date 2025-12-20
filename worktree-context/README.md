@@ -10,10 +10,10 @@ Install the plugin into your project's `context` branch so it's stored alongside
 
 ```bash
 # Add the marketplace
-/plugin marketplace add iknite/worktree-context-plugin
+/plugin marketplace add iknite/claude-code-marketplace
 
 # Install to project (stored in .claude/, version controlled)
-/plugin install worktree-context@worktree-context-marketplace --scope project
+/plugin install worktree-context@iknite-cc-marketplace --scope project
 ```
 
 This installs the plugin into your `context` branch's `.claude/` directory, keeping AI tooling separate from your project code.
@@ -22,14 +22,14 @@ This installs the plugin into your `context` branch's `.claude/` directory, keep
 
 ```bash
 # Install locally (gitignored, not shared with team)
-/plugin install worktree-context@worktree-context-marketplace --scope local
+/plugin install worktree-context@iknite-cc-marketplace --scope local
 ```
 
 ### Global Installation
 
 ```bash
 # Install globally (available in all projects)
-/plugin install worktree-context@worktree-context-marketplace --scope user
+/plugin install worktree-context@iknite-cc-marketplace --scope user
 ```
 
 ### Verify Installation
@@ -127,10 +127,10 @@ bare-repo/
 /plugin update worktree-context
 
 # Disable temporarily
-/plugin disable worktree-context@worktree-context-marketplace
+/plugin disable worktree-context@iknite-cc-marketplace
 
 # Uninstall
-/plugin uninstall worktree-context@worktree-context-marketplace
+/plugin uninstall worktree-context@iknite-cc-marketplace
 ```
 
 ## Troubleshooting

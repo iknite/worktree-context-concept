@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "worktree-context",
-      "source": "./",
+      "source": "./worktree-context",
       "description": "Bootstrap projects with separation of concerns between AI configuration and source code",
       "version": "1.0.0",
       "author": {
