@@ -21,5 +21,5 @@ Bare git repo with worktrees. `context` branch = metadata/config, `master` = sou
 
 Use `worktree-context` plugin:
 - `/worktree-context:wt-list` - List worktrees
-- `/worktree-context:wt-add <branch>` - Create worktree from master
+- `/worktree-context:wt-new <branch>` - Create worktree from master
 - `/worktree-context:wt-remove <branch>` - Remove worktree
